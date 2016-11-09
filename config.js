@@ -10,5 +10,9 @@ module.exports = {
   },
   limit: {
     results: 10
+  },
+  jwt: {
+    secret: 'ABCDEFG',
+    expiresIn: '1d'
   }
 }

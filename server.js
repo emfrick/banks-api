@@ -3,7 +3,6 @@
 //
 const express    = require('express');
 const app        = express();
-const jwt        = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const morgan     = require('morgan');
 const config     = require('./config');
