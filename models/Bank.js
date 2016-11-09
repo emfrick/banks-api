@@ -1,6 +1,6 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-let bankSchema = mongoose.Schema({
+const bankSchema = mongoose.Schema({
   name: String,
   address: String,
   city: String,

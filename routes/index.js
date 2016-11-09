@@ -5,7 +5,9 @@ const config = require('../config');
 const Bank   = require('../models/Bank');
 const routes = require('express').Router();
 
+//
 // Get all banks
+//
 routes.get('/banks', (req, res) => {
 
   let limit = Number(req.query.limit) || config.limit.results;
@@ -22,14 +24,16 @@ routes.get('/banks', (req, res) => {
       });
 });
 
+//
 // Get bank by ID
+//
 routes.get('/banks/:id', (req, res) => {
   Bank.find({ '_id': req.params.id })
       .then(bank => {
         res.json(bank);
       })
       .catch(error => {
-        res.json({ error })
+        res.json({ error });
       });
 });
 
