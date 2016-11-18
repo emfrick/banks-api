@@ -41,9 +41,8 @@ routes.post('/', (req, res) => {
 
         // If a user was found, return an error
         if (user) {
-
           // User already exists
-          return res.status(400).json({ error: "Email address is already registered" });
+          throw new Error("Email address already exists");
         }
         else {
           // Create a new user model
@@ -64,22 +63,18 @@ routes.post('/', (req, res) => {
           user.setPassword(req.body.password);
 
           // Save the user
-          user.save( (err) => {
-
-            // TODO: Handle this error
-            if (err) throw err;
-
-            let token = user.generateJwt();
-            res.json({
-              token: token
-            });
-
-          });
+          return user.save();
         }
 
       })
-      .catch(err => {
-        return res.json({ error });
+      .then(user => {
+          let token = user.generateJwt();
+          res.json({
+            token: token
+          });
+      })
+      .catch(error => {
+        res.json({ error: error.message });
       });
 
 });
