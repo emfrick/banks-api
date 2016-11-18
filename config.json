@@ -14,5 +14,10 @@
   "jwt": {
     "secret": "ABCDEFG",
     "expiresIn": "1d"
+  },
+  "security": {
+    "salt": {
+      "rounds": 10
+    }
   }
 }

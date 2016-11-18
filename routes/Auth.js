@@ -9,25 +9,41 @@ const config     = require('../config');
 //
 // Models used in this route
 //
-
+const User = require('../models/User');
 
 //
 // Authentication Route
 //
 routes.post('/', (req, res) => {
 
-  // TODO: Authenticate the user
-  // AuthenticateUser(req.body)
+  User.findOne({ email: req.body.email })
+      .then(user => {
 
-  // Authenticated, sign the token
-  let token = jwt.sign({ name: req.body.name, age: 31 }, config.jwt.secret, {
-    expiresIn: config.jwt.expiresIn
-  });
+        // If no user is found or the password is incorrect
+        if (!user || !user.comparePassword(req.body.password)) {
 
-  // Return the token and the success message
-  res.json({
-    token: token
-  });
+          // Send the "Bad Request"
+          return res.status(400).json({
+            error: "Username/Password incorrect"
+          });
+        }
+
+        user.login_history.push(Date.now())
+
+        // Save the user
+        user.save( (err) => {
+
+          // TODO: Handle this error
+          if (err) throw err;
+
+          let token = user.generateJwt();
+          res.json({ token });
+        });
+        
+      })
+      .catch(error => {
+        res.json({ error });
+      });
 });
 
 module.exports = routes;

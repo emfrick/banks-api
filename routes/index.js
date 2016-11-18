@@ -11,12 +11,14 @@ const routes     = require('express').Router();
 //
 const BankRoutes = require('./Bank');
 const AuthRoutes = require('./Auth');
+const UserRoutes = require('./User');
 
 //
 // Define all routes
 //
 routes.use('/banks', BankRoutes);
 routes.use('/auth',  AuthRoutes);
+routes.use('/users', UserRoutes);
 
 //
 // Catch the express-jwt errors
