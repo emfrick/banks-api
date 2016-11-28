@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const bankSchema = mongoose.Schema({
-  name: String,
+const bankSchema = Schema({
+  name: {
+    type: String,
+    required: true
+  },
   address: String,
   city: String,
   state: String,
@@ -9,7 +13,15 @@ const bankSchema = mongoose.Schema({
   county: String,
   city_of_high_holder: String,
   num_branches: Number,
-  website_address: String
+  website_address: String,
+  create_date: Date,
+  comments: [
+    {
+      author: Schema.Types.ObjectId,
+      date: Date,
+      body: String
+    }
+  ]
 });
 
 module.exports = mongoose.model('Bank', bankSchema);
