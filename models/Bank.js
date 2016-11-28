@@ -17,7 +17,10 @@ const bankSchema = Schema({
   create_date: Date,
   comments: [
     {
-      author: Schema.Types.ObjectId,
+      author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      },
       date: Date,
       body: String
     }

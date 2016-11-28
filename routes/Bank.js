@@ -35,6 +35,7 @@ routes.get('/', (req, res) => {
 //
 routes.get('/:id', expressJwt({ secret: config.jwt.secret }), (req, res) => {
   Bank.find({ '_id': req.params.id })
+      .populate('comments.author', 'first_name last_name email')
       .then(bank => {
         res.json(bank);
       })
@@ -112,5 +113,56 @@ routes.post('/', expressJwt({ secret: config.jwt.secret }), (req, res) => {
         }
       });
 })
+
+//
+// Update a bank
+//
+routes.put('/:id', expressJwt({ secret: config.jwt.secret }), (req, res) =>{
+
+  // Find the bank by ID, update it with the given POST data
+  Bank.findOneAndUpdate({ '_id': req.params.id }, req.body, { new: true })
+      .then(bank => {
+        res.json({
+          bank: bank
+        })
+      })
+      .catch(error => {
+        res.status(401).json({ error });
+      })
+});
+
+//
+// Add a comment to a bank
+//
+routes.post('/:id/comments', expressJwt({ secret: config.jwt.secret }), (req, res) => {
+
+  console.log(req.user);
+
+  let comment = {
+    author: req.user.id,
+    date: req.body.date,
+    body: req.body.body
+  };
+
+  Bank.findOne({ '_id': req.params.id })
+      .then(bank => {
+
+        if (!bank) {
+          // Bank does not exist
+          throw new Error('Bank does not exist');
+        }
+        else {
+          bank.comments.push(comment);
+
+          return bank.save();
+        }
+      })
+      .then(bank => {
+        res.json({ bank });
+      })
+      .catch(error => {
+        res.status(401).json({ error });
+      });
+});
 
 module.exports = routes;
