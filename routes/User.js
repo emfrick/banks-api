@@ -31,6 +31,21 @@ routes.get('/', (req, res) => {
 });
 
 //
+// Get an individual user
+//
+routes.get('/:id', expressJwt({ secret: config.jwt.secret }), (req, res) => {
+
+  User.findOne({ '_id': req.params.id })
+      .select({ 'hash': false, 'salt': false })
+      .then(user => {
+        res.json(user);
+      })
+      .catch(error => {
+        res.json({ error });
+      });
+})
+
+//
 // Add user
 //
 routes.post('/', (req, res) => {
