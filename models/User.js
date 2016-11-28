@@ -56,7 +56,12 @@ userSchema.methods.generateJwt = function() {
   // 'this' refers to the object instance (can't use ES6 arrow fns here)
 
   // Return the signed token
-  return jwt.sign( { email: this.email }, config.jwt.secret, {
+  let payload = {
+    email: this.email,
+    _id: this._id
+  }
+
+  return jwt.sign( payload, config.jwt.secret, {
     expiresIn: config.jwt.expiresIn
   });
 
