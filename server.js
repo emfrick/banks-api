@@ -5,6 +5,7 @@ const express    = require('express');
 const app        = express();
 const bodyParser = require('body-parser');
 const morgan     = require('morgan');
+const cors       = require('cors');
 const config     = require('./config');
 
 //
@@ -12,6 +13,11 @@ const config     = require('./config');
 //
 let Database = require('./database');
 new Database(`${config.db.host}:${config.db.port}/${config.db.name}`);
+
+//
+// Allow Cross-Origin-Resource Sharing
+//
+app.use(cors());
 
 //
 // Setup Body-Parser to grab JSON Post Requests and/or URL parameters
